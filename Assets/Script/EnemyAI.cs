@@ -5,21 +5,29 @@ using UnityEngine.AI;
 
 public class EnemyAI : MonoBehaviour
 {
-    [SerializeField] Transform target;
     [SerializeField] float chaseRange = 10f;
     [SerializeField] float turnSpeed= 4f;
 
     NavMeshAgent navMeshAgent;
     float distanceToTarget = Mathf.Infinity;//
     bool isProvoked = false;// dau tien chua bi khieu khich
-    
+    EnemyHeath health;
+    Transform target;
+
     void Start()
     {
         navMeshAgent = GetComponent<NavMeshAgent>();
+        health = GetComponent<EnemyHeath>();
+        target = FindObjectOfType<PlayerHealth>().transform;
     }
 
     void Update()
     {
+        if (health.IsDied())//neu het mau cua Zombe
+        {
+            enabled = false;
+            navMeshAgent.enabled = false;//tat nav
+        }
         distanceToTarget = Vector3.Distance(target.position, transform.position);
         if (isProvoked)
         {
@@ -62,7 +70,7 @@ public class EnemyAI : MonoBehaviour
     private void AttackTarget()
     {
         GetComponent<Animator>().SetBool("attack", true);
-        //Debug.Log(name + " has seeked anh is destroying" + target.name);
+        
     }
 
     private void FaceTarget()
@@ -70,7 +78,7 @@ public class EnemyAI : MonoBehaviour
         Vector3 direction = (target.position - transform.position).normalized;
         Quaternion lookrotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));//
         transform.rotation = Quaternion.Slerp(transform.rotation, lookrotation, turnSpeed * Time.deltaTime);
-        Debug.Log("roll roll");
+        
     }
 
     void OnDrawGizmosSelected()//vong tron khoag cach

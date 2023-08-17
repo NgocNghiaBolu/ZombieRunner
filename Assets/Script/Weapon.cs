@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class Weapon : MonoBehaviour
@@ -12,9 +13,12 @@ public class Weapon : MonoBehaviour
     [SerializeField] GameObject hitEffect;
     [SerializeField] AmmoWeapon ammoSlot;
     [SerializeField] AmmoType ammoType;
-    [SerializeField] float timeBetweenShots = 1f;
+    [SerializeField] float timeBetweenShots = 0.5f;
+    [SerializeField] TextMeshProUGUI textAmmo;
+    
+    FlashLight Flight;
 
-
+    
     bool canShoot = true;
 
     private void OnEnable()
@@ -24,10 +28,18 @@ public class Weapon : MonoBehaviour
 
     void Update()
     {
+        DisplayAmmo();
         if (Input.GetMouseButtonDown(0) && canShoot == true)
         {
             StartCoroutine(Shoot());
         }
+    }
+
+    public void DisplayAmmo()
+    {
+        int currentAmmo = ammoSlot.GetCurrentAmmo(ammoType);
+        textAmmo.text = currentAmmo.ToString();
+        
     }
 
     IEnumerator Shoot()
@@ -56,7 +68,6 @@ public class Weapon : MonoBehaviour
         {
             HitEffectImpact(hit);
             EnemyHeath target = hit.transform.GetComponent<EnemyHeath>();//neu ban trung muc tieu thi toi cript Enemyhealth
-            //Debug.Log("I hit this something" + hit.transform.name);
             if (target == null) return;
             target.TakeDamage(damage);//muc tieu bi tan cong va tru maus
         }
