@@ -7,6 +7,7 @@ public class EnemyAttack : MonoBehaviour
     PlayerHealth target;
     [SerializeField] float damage = 30f;
 
+
    //[System.Obsolete]//
     void Start()
     {

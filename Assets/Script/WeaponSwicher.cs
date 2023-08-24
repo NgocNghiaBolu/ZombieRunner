@@ -11,7 +11,7 @@ public class WeaponSwicher : MonoBehaviour
 
     void Start()
     {
-        SetWeaponActive(); 
+        SetWeaponActive();
     }
 
     void Update()

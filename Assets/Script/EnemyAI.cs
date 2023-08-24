@@ -10,12 +10,16 @@ public class EnemyAI : MonoBehaviour
 
     NavMeshAgent navMeshAgent;
     float distanceToTarget = Mathf.Infinity;//
-    bool isProvoked = false;// dau tien chua bi khieu khich
+
     EnemyHeath health;
     Transform target;
+    public static AudioSource audi;
+  
+    bool isProvoked = false;// dau tien chua bi khieu khich
 
     void Start()
     {
+        audi = GetComponent<AudioSource>();
         navMeshAgent = GetComponent<NavMeshAgent>();
         health = GetComponent<EnemyHeath>();
         target = FindObjectOfType<PlayerHealth>().transform;
@@ -23,27 +27,30 @@ public class EnemyAI : MonoBehaviour
 
     void Update()
     {
-        if (health.IsDied())//neu het mau cua Zombe
-        {
-            enabled = false;
-            navMeshAgent.enabled = false;//tat nav
-        }
+
         distanceToTarget = Vector3.Distance(target.position, transform.position);
+
         if (isProvoked)
         {
             EngageTarget();   
         }
         else if(distanceToTarget <= chaseRange)//khoang cach den target be hon pham vi giua player vs enemy
         {
+            audi.Play();
             isProvoked = true;//bi khieu khich nen tan cong 
         }
-        
+
+        if (health.IsDied())//neu het mau cua Zombe
+        {
+            navMeshAgent.enabled = false;//tat nav
+        }
     }
 
     public void OnDamageEnemy()
     {
         isProvoked = true;
     }
+
     private void EngageTarget()
     {
         FaceTarget();
@@ -56,7 +63,6 @@ public class EnemyAI : MonoBehaviour
         {
             AttackTarget();
         }
-       
     }
 
     private void ChaseTarget()
@@ -64,13 +70,11 @@ public class EnemyAI : MonoBehaviour
         GetComponent<Animator>().SetBool("attack", false);
         GetComponent<Animator>().SetTrigger("move");//chuyen sang trang thai move trong anima
         navMeshAgent.SetDestination(target.position);//thi di tim den muc tieu da dinh huong
-        
     }
 
     private void AttackTarget()
     {
         GetComponent<Animator>().SetBool("attack", true);
-        
     }
 
     private void FaceTarget()

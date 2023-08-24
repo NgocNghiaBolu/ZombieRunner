@@ -15,12 +15,24 @@ public class Weapon : MonoBehaviour
     [SerializeField] AmmoType ammoType;
     [SerializeField] float timeBetweenShots = 0.5f;
     [SerializeField] TextMeshProUGUI textAmmo;
-    
-    FlashLight Flight;
+    //[SerializeField] AudioClip AuOverAmmo;
 
+    private AudioSource AuShootGun;
+    private Animator animGun;
     
+
+    void Start()
+    {
+        animGun = GetComponent<Animator>();
+        AuShootGun = GetComponent<AudioSource>();
+    }
+
+    void SetGunShoot(bool isFire)
+    {
+        animGun.SetBool("isShoot", isFire);
+    }
+
     bool canShoot = true;
-
     private void OnEnable()
     {
         canShoot = true;
@@ -29,9 +41,14 @@ public class Weapon : MonoBehaviour
     void Update()
     {
         DisplayAmmo();
-        if (Input.GetMouseButtonDown(0) && canShoot == true)
+        if (Input.GetButton("Fire1") && canShoot == true) 
         {
+            AuShootGun.Play();
             StartCoroutine(Shoot());
+        }
+        else
+        {
+            SetGunShoot(false);
         }
     }
 
@@ -39,7 +56,6 @@ public class Weapon : MonoBehaviour
     {
         int currentAmmo = ammoSlot.GetCurrentAmmo(ammoType);
         textAmmo.text = currentAmmo.ToString();
-        
     }
 
     IEnumerator Shoot()
@@ -52,7 +68,7 @@ public class Weapon : MonoBehaviour
             ammoSlot.ReduceCurrentAmmo(ammoType);
         }
         yield return new WaitForSeconds(timeBetweenShots);
-        canShoot = true;//dung lai 1s roi ban tiep
+        canShoot = true; //dung lai 1s roi ban tiep
     }
 
     private void PuzzleFlastGun()
@@ -64,8 +80,9 @@ public class Weapon : MonoBehaviour
     {
         RaycastHit hit;
 
-        if (Physics.Raycast(FPCamera.transform.position, FPCamera.transform.forward, out hit, range))//ban ve phia truoc theo huong va co pham vi da chon
+        if (Physics.Raycast(FPCamera.transform.position, FPCamera.transform.forward, out hit, range))//ban ve phia truoc theo huong cua player va co pham vi da chon
         {
+            SetGunShoot(true);
             HitEffectImpact(hit);
             EnemyHeath target = hit.transform.GetComponent<EnemyHeath>();//neu ban trung muc tieu thi toi cript Enemyhealth
             if (target == null) return;
