@@ -38,7 +38,7 @@ Transform:
   m_Children:
   - {fileID: 1693092335694867865}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: -0.159, y: -12.952, z: -1.894}
 --- !u!23 &7144123534009723072
 MeshRenderer:
@@ -155,7 +155,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   HitPoint: 500
   ShootTime: 0.2
-  AuZombDie: {fileID: 0}
+  AuZombDie: {fileID: 8300000, guid: 776d27226c627cc4782408d0fcda6858, type: 3}
 --- !u!114 &5501639839578252051
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -203,9 +203,9 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: f880835a5c255cd4ead22fd9cb3a4f10, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.74
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
