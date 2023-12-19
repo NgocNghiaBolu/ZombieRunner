@@ -14,8 +14,6 @@ public class ZoomWeapon : MonoBehaviour
     [SerializeField] float zoomInSensitivity = 0.5f;
     //[SerializeField] float ZoomSmooth = 5f;
 
-    
-
     bool CheckZoomed = false;
 
     private void OnDisable()
